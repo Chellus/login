@@ -5,19 +5,12 @@ with open("credentials.yaml") as file:
     credentials = yaml.safe_load(file)
 
 def is_valid_credentials(user, password):
-    user_stored_creds = None
-
-    for cred in credentials:
-        if cred["username"] == user:
-            user_stored_creds = cred
-            break
-
-    if user_stored_creds is None:
-        return False
-
     password = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    for cred in credentials:
+        if cred["username"] == user and cred["password_hash"] == password:
+            return True
 
-    return user_stored_creds["password_hash"] == password
+    return False
 
 if __name__ == "__main__":
     username = input("What is your username?: ")
